@@ -34,7 +34,6 @@ public class Window {
 
 		init(net);
 
-		
 		frame.setVisible(true);
 
 		frame.addWindowListener(new WindowListener() {
@@ -103,8 +102,7 @@ public class Window {
 		}
 
 		height = maxneur * (realNeuronSize);
-		width = net.getSize()
-				* (realNeuronSize + settings.getWeightSpaceWidth());
+		width = net.getSize() * (realNeuronSize + settings.getWeightSpaceWidth());
 		width = width - settings.getWeightSpaceWidth();
 
 		frame = new JFrame();
@@ -140,20 +138,23 @@ public class Window {
 
 					int px = calculateWeightX(layerIndex - 1);
 					int py = calculateWeightY(parentNeuronIndex, parentLayer.getSize());
-
 					int x = calculateWeightX(layerIndex);
 					int y = calculateWeightY(neuronIndex, layer.getSize());
 
-					g.setColor(Color.BLACK);
+					double alpha = settings.getNeuronBrightness(parentLayer.getValue(parentNeuronIndex), layerIndex - 1,
+							parentNeuronIndex);
+					alpha = alpha > 1 ? 1 : alpha < 0 ? 0 : alpha;
+					Color cdef = settings.getWeightONColor(layerIndex - 1, layerIndex, parentNeuronIndex, neuronIndex);
+					Color c = new Color(cdef.getRed(), cdef.getGreen(), cdef.getBlue(), (int) (alpha * 255));
 
 					double weight = layer.getWeight(parentNeuronIndex, neuronIndex);
-
 					weight = weight - settings.getWeightMin();
-
 					weight = weight > settings.getWeightMax() ? settings.getWeightMax() : weight < 0 ? 0 : weight;
 
 					g.setStroke(new BasicStroke((float) weight * settings.getWeightScale()));
-
+					g.setColor(settings.getWeightOFFColor(layerIndex - 1, layerIndex, parentNeuronIndex, neuronIndex));
+					g.drawLine(px, py, x, y);
+					g.setColor(c);
 					g.drawLine(px, py, x, y);
 
 				}
@@ -168,18 +169,16 @@ public class Window {
 
 			for (int neuronIndex = 0; neuronIndex < layer.getSize(); neuronIndex++) {
 
-				double alpha = settings.getNeuronBrightness(layer.getValue(neuronIndex), layerIndex, neuronIndex);
-
 				int x = calculateNeuronX(layerIndex);
-
 				int y = calculateNeuronY(neuronIndex, layer.getSize());
 
+				double alpha = settings.getNeuronBrightness(layer.getValue(neuronIndex), layerIndex, neuronIndex);
 				alpha = alpha > 1 ? 1 : alpha < 0 ? 0 : alpha;
-				Color c = new Color(219, 9, 51, (int) (alpha * 255));
+				Color cdef = settings.getNeuronONColor(layerIndex, neuronIndex);
+				Color c = new Color(cdef.getRed(), cdef.getGreen(), cdef.getBlue(), (int) (alpha * 255));
 
-				g.setColor(Color.BLACK);
+				g.setColor(settings.getNeuronOFFColor(layerIndex, neuronIndex));
 				g.fillOval(x, y, settings.getNeuronSize(), settings.getNeuronSize());
-
 				g.setColor(c);
 				g.fillOval(x, y, settings.getNeuronSize(), settings.getNeuronSize());
 			}
@@ -194,8 +193,7 @@ public class Window {
 	private int calculateNeuronY(int neuronIndex, int layerSize) {
 		int y = neuronIndex * (realNeuronSize);
 
-		y = y + (maxneur * (realNeuronSize)) / 2
-				- (layerSize * (realNeuronSize)) / 2;
+		y = y + (maxneur * (realNeuronSize)) / 2 - (layerSize * (realNeuronSize)) / 2;
 
 		return y;
 	}

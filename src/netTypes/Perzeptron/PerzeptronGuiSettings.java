@@ -1,5 +1,7 @@
 package netTypes.Perzeptron;
 
+import java.awt.Color;
+
 import gui.NetWorkGuiSettings;
 
 public class PerzeptronGuiSettings implements NetWorkGuiSettings {
@@ -37,6 +39,26 @@ public class PerzeptronGuiSettings implements NetWorkGuiSettings {
 	@Override
 	public float getWeightScale() {
 		return 30;
+	}
+
+	@Override
+	public Color getNeuronONColor(int layerIndex, int neuronIndex) {
+		return Color.RED;
+	}
+
+	@Override
+	public Color getNeuronOFFColor(int layerIndex, int neuronIndex) {
+		return Color.BLACK;
+	}
+
+	@Override
+	public Color getWeightONColor(int parentLayerIndex, int layerIndex, int parentNeuronIndex, int neuronIndex) {
+		return Color.GREEN;
+	}
+
+	@Override
+	public Color getWeightOFFColor(int parentLayerIndex, int layerIndex, int parentNeuronIndex, int neuronIndex) {
+		return Color.BLACK;
 	}
 
 }
