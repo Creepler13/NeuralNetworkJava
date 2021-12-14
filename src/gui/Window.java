@@ -25,10 +25,16 @@ public class Window {
 
 	private NetWorkGuiSettings settings;
 
+	private int realNeuronSize;
+
 	public Window(Network net, NetWorkGuiSettings settings) {
 		this.net = net;
 		this.settings = settings;
+		realNeuronSize = settings.getNeuronSize() + settings.getNeuronDistance();
+
 		init(net);
+
+		
 		frame.setVisible(true);
 
 		frame.addWindowListener(new WindowListener() {
@@ -96,9 +102,9 @@ public class Window {
 				maxneur = layer.getSize();
 		}
 
-		height = maxneur * (settings.getNeuronSize() + settings.getNeuronDistance());
+		height = maxneur * (realNeuronSize);
 		width = net.getSize()
-				* (settings.getNeuronSize() + settings.getNeuronDistance() + settings.getWeightSpaceWidth());
+				* (realNeuronSize + settings.getWeightSpaceWidth());
 		width = width - settings.getWeightSpaceWidth();
 
 		frame = new JFrame();
@@ -181,25 +187,25 @@ public class Window {
 	}
 
 	private int calculateNeuronX(int layerIndex) {
-		int x = layerIndex * (settings.getNeuronSize() + settings.getNeuronDistance() + settings.getWeightSpaceWidth());
+		int x = layerIndex * (realNeuronSize + settings.getWeightSpaceWidth());
 		return x;
 	}
 
 	private int calculateNeuronY(int neuronIndex, int layerSize) {
-		int y = neuronIndex * (settings.getNeuronSize() + settings.getNeuronDistance());
+		int y = neuronIndex * (realNeuronSize);
 
-		y = y + (maxneur * (settings.getNeuronSize() + settings.getNeuronDistance())) / 2
-				- (layerSize * (settings.getNeuronSize() + settings.getNeuronDistance())) / 2;
+		y = y + (maxneur * (realNeuronSize)) / 2
+				- (layerSize * (realNeuronSize)) / 2;
 
 		return y;
 	}
 
 	private int calculateWeightX(int layerIndex) {
-		return calculateNeuronX(layerIndex) + (settings.getNeuronSize() + settings.getNeuronDistance()) / 2;
+		return calculateNeuronX(layerIndex) + (realNeuronSize) / 2;
 	}
 
 	private int calculateWeightY(int neuronIndex, int layerSize) {
-		return calculateNeuronY(neuronIndex, layerSize) + (settings.getNeuronSize() + settings.getNeuronDistance()) / 2;
+		return calculateNeuronY(neuronIndex, layerSize) + (realNeuronSize) / 2;
 	}
 
 }
