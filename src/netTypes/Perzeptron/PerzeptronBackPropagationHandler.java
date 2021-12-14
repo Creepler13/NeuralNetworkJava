@@ -16,10 +16,10 @@ public class PerzeptronBackPropagationHandler implements BackPropagationHandler 
 	public void backpropagation(Network net, double[] input, double[] output) {
 		OutputLayer l = net.getOutputLayer();
 
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < l.getParentLayer().getSize(); i++) {
 			double w = l.getWeight(i, 0);
 			w = w + (learnRate * (output[0] - l.getValue(0)) * input[i]);
-			
+
 			l.setWeight(i, 0, w);
 		}
 

@@ -86,9 +86,11 @@ public class Window {
 		return running;
 	}
 
+	private int maxneur;
+
 	private void init(Network net) {
 
-		int maxneur = 0;
+		maxneur = 0;
 		for (Layer layer : net) {
 			if (layer.getSize() > maxneur)
 				maxneur = layer.getSize();
@@ -130,17 +132,11 @@ public class Window {
 
 				for (int parentNeuronIndex = 0; parentNeuronIndex < parentLayer.getSize(); parentNeuronIndex++) {
 
-					int px = (layerIndex - 1)
-							* (settings.getNeuronSize() + settings.getNeuronDistance() + settings.getWeightSpaceWidth())
-							+ settings.getNeuronSize() / 2;
-					int py = parentNeuronIndex * (settings.getNeuronSize() + settings.getNeuronDistance())
-							+ settings.getNeuronSize() / 2;
+					int px = calculateWeightX(layerIndex - 1);
+					int py = calculateWeightY(parentNeuronIndex, parentLayer.getSize());
 
-					int x = layerIndex
-							* (settings.getNeuronSize() + settings.getNeuronDistance() + settings.getWeightSpaceWidth())
-							+ settings.getNeuronSize() / 2;
-					int y = neuronIndex * (settings.getNeuronSize() + settings.getNeuronDistance())
-							+ settings.getNeuronSize() / 2;
+					int x = calculateWeightX(layerIndex);
+					int y = calculateWeightY(neuronIndex, layer.getSize());
 
 					g.setColor(Color.BLACK);
 
@@ -165,11 +161,12 @@ public class Window {
 			Layer layer = net.getLayer(layerIndex);
 
 			for (int neuronIndex = 0; neuronIndex < layer.getSize(); neuronIndex++) {
-				int x = layerIndex
-						* (settings.getNeuronSize() + settings.getNeuronDistance() + settings.getWeightSpaceWidth());
-				int y = neuronIndex * (settings.getNeuronSize() + settings.getNeuronDistance());
 
 				double alpha = settings.getNeuronBrightness(layer.getValue(neuronIndex), layerIndex, neuronIndex);
+
+				int x = calculateNeuronX(layerIndex);
+
+				int y = calculateNeuronY(neuronIndex, layer.getSize());
 
 				alpha = alpha > 1 ? 1 : alpha < 0 ? 0 : alpha;
 				Color c = new Color(219, 9, 51, (int) (alpha * 255));
@@ -181,6 +178,28 @@ public class Window {
 				g.fillOval(x, y, settings.getNeuronSize(), settings.getNeuronSize());
 			}
 		}
+	}
+
+	private int calculateNeuronX(int layerIndex) {
+		int x = layerIndex * (settings.getNeuronSize() + settings.getNeuronDistance() + settings.getWeightSpaceWidth());
+		return x;
+	}
+
+	private int calculateNeuronY(int neuronIndex, int layerSize) {
+		int y = neuronIndex * (settings.getNeuronSize() + settings.getNeuronDistance());
+
+		y = y + (maxneur * (settings.getNeuronSize() + settings.getNeuronDistance())) / 2
+				- (layerSize * (settings.getNeuronSize() + settings.getNeuronDistance())) / 2;
+
+		return y;
+	}
+
+	private int calculateWeightX(int layerIndex) {
+		return calculateNeuronX(layerIndex) + (settings.getNeuronSize() + settings.getNeuronDistance()) / 2;
+	}
+
+	private int calculateWeightY(int neuronIndex, int layerSize) {
+		return calculateNeuronY(neuronIndex, layerSize) + (settings.getNeuronSize() + settings.getNeuronDistance()) / 2;
 	}
 
 }
