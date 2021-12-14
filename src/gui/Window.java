@@ -3,6 +3,8 @@ package gui;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
@@ -19,6 +21,8 @@ public class Window {
 
 	JFrame frame;
 
+	private Boolean running = true;
+
 	private NetWorkGuiSettings settings;
 
 	public Window(Network net, NetWorkGuiSettings settings) {
@@ -26,9 +30,61 @@ public class Window {
 		this.settings = settings;
 		init(net);
 		frame.setVisible(true);
+
+		frame.addWindowListener(new WindowListener() {
+
+			@Override
+			public void windowOpened(WindowEvent e) {
+			}
+
+			@Override
+			public void windowIconified(WindowEvent e) {
+			}
+
+			@Override
+			public void windowDeiconified(WindowEvent e) {
+			}
+
+			@Override
+			public void windowDeactivated(WindowEvent e) {
+			}
+
+			@Override
+			public void windowClosing(WindowEvent e) {
+				running = false;
+			}
+
+			@Override
+			public void windowClosed(WindowEvent e) {
+			}
+
+			@Override
+			public void windowActivated(WindowEvent e) {
+			}
+		});
+
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				while (running) {
+					try {
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					update();
+
+				}
+			}
+		}).start();
 	}
 
 	private int width, height;
+
+	public Boolean isRunning() {
+		return running;
+	}
 
 	private void init(Network net) {
 

@@ -43,10 +43,20 @@ public class Network implements Iterable<Layer> {
 
 	}
 
-	public void train(DataSet dataSet, int count, Boolean randomize) {
+	Window w;
+
+	public void train(DataSet dataSet, int count, Boolean randomize, int sleepTime) {
 		Random r = new Random();
 
 		for (int i = 0; i < count; i++) {
+			if (w != null)
+				if (w.isRunning())
+					try {
+						Thread.sleep(sleepTime);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+
 			int dataindex = 0;
 			if (randomize) {
 				dataindex = (int) (r.nextDouble() * (dataSet.size()));
@@ -94,10 +104,10 @@ public class Network implements Iterable<Layer> {
 	}
 
 	public void visualize(NetWorkGuiSettings settings) {
-	Window w=	new Window(this,settings);
-	w.update();
+		w = new Window(this, settings);
+		w.update();
 	}
-	
+
 	public int getSize() {
 		return layers.size();
 	}

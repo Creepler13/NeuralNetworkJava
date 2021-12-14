@@ -26,9 +26,9 @@ public class Main {
 
 		n.generate(-0.5, 0.5);
 
-		n.train(dataSet, 10000, true);
-
 		n.visualize(new PerzeptronGuiSettings());
+
+		n.train(dataSet, 10000, true, 50);
 
 		double[] da = n.logRun(d2[0]);
 
