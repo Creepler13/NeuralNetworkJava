@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
-import core.exceptions.NetworkLayoutException;
 import gui.NetWorkGuiSettings;
 import gui.Window;
 
@@ -14,29 +13,23 @@ public class Network implements Iterable<Layer> {
 
 	private BackPropagationHandler backHandler;
 
-	public Network(BackPropagationHandler backHandler, Layer... layers) throws NetworkLayoutException {
+	public Network(BackPropagationHandler backHandler, Layer... layers)  {
 		this.backHandler = backHandler;
-		if (layers[0] instanceof InputLayer && layers[layers.length - 1] instanceof OutputLayer)
-			for (Layer layer : layers) {
-				this.layers.add(layer);
-			}
-		else
-			throw new NetworkLayoutException();
+		for (Layer layer : layers) {
+			this.layers.add(layer);
+		}
 	}
 
-	public Network(BackPropagationHandler backHandler, ArrayList<Layer> layers) throws NetworkLayoutException {
+	public Network(BackPropagationHandler backHandler, ArrayList<Layer> layers) {
 		this.backHandler = backHandler;
-		if (layers.get(0) instanceof InputLayer && layers.get(layers.size() - 1) instanceof OutputLayer)
-			for (Layer layer : layers) {
-				this.layers.add(layer);
-			}
-		else
-			throw new NetworkLayoutException();
+		for (Layer layer : layers) {
+			this.layers.add(layer);
+		}
 	}
 
 	public void generate(double min, double max) {
 		for (int i = 1; i < layers.size(); i++) {
-			HiddenLayer layer = (HiddenLayer) layers.get(i);
+			Layer layer = layers.get(i);
 			layer.setParentLayer(layers.get(i - 1));
 			layer.generate(min, max);
 		}
@@ -75,7 +68,7 @@ public class Network implements Iterable<Layer> {
 	public double[] run(double[] input) {
 		getInputLayer().setValues(input);
 		for (int i = 1; i < getSize(); i++) {
-			((HiddenLayer) getLayer(i)).net();
+			(getLayer(i)).net();
 		}
 		return getOutputLayer().getValues();
 	}
@@ -112,12 +105,12 @@ public class Network implements Iterable<Layer> {
 		return layers.size();
 	}
 
-	public OutputLayer getOutputLayer() {
-		return (OutputLayer) getLayer(getSize() - 1);
+	public Layer getOutputLayer() {
+		return getLayer(getSize() - 1);
 	}
 
-	public InputLayer getInputLayer() {
-		return (InputLayer) getLayer(0);
+	public Layer getInputLayer() {
+		return getLayer(0);
 	}
 
 	public Layer getLayer(int index) {

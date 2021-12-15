@@ -1,8 +1,8 @@
 package netTypes.Perzeptron;
 
-import core.OutputLayer;
+import core.Layer;
 
-public class PerzeptronOutput extends OutputLayer {
+public class PerzeptronOutput extends Layer {
 
 	public PerzeptronOutput(int nodes) {
 		super(nodes);

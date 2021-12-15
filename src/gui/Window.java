@@ -9,7 +9,6 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
-import core.HiddenLayer;
 import core.Layer;
 import core.Network;
 
@@ -128,7 +127,7 @@ public class Window {
 
 	private void drawWeights(Graphics2D g) {
 		for (int layerIndex = 1; layerIndex < net.getSize(); layerIndex++) {
-			HiddenLayer layer = (HiddenLayer) net.getLayer(layerIndex);
+			Layer layer = net.getLayer(layerIndex);
 
 			for (int neuronIndex = 0; neuronIndex < layer.getSize(); neuronIndex++) {
 

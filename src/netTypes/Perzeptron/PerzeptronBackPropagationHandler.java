@@ -1,8 +1,8 @@
 package netTypes.Perzeptron;
 
 import core.BackPropagationHandler;
+import core.Layer;
 import core.Network;
-import core.OutputLayer;
 
 public class PerzeptronBackPropagationHandler implements BackPropagationHandler {
 
@@ -14,7 +14,7 @@ public class PerzeptronBackPropagationHandler implements BackPropagationHandler 
 
 	@Override
 	public void backpropagation(Network net, double[] input, double[] output) {
-		OutputLayer l = net.getOutputLayer();
+		Layer l = net.getOutputLayer();
 
 		for (int i = 0; i < l.getParentLayer().getSize(); i++) {
 			double w = l.getWeight(i, 0);
